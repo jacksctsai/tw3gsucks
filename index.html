@@ -1,0 +1,92 @@
+<html>
+	<head>
+		<title>Taiwan 3G/Wireless Network Speed Testing (beta)</title>
+		<link type="text/css" rel="stylesheet" href="/css/main.css" />
+		<script type="text/javascript" src="http://advajax.googlecode.com/files/advajax.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+		<meta http-equiv="Pragma" content="no-cache"> 
+		<meta http-equiv="Cache-Control" content="no-cache"> 
+		<meta http-equiv="Expires" content="0"> 
+		<script type="text/javascript">
+		
+		  var _gaq = _gaq || [];
+		  _gaq.push(['_setAccount', 'UA-25199920-1']);
+		  _gaq.push(['_trackPageview']);
+		
+		  (function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		  })();
+		
+		</script>
+	</head>
+	<body>
+
+  	<div id="intro">
+  	台灣 3G 無線網路測速 (Beta)
+  	</div>
+  	<div id="reportPanel" class="msg">
+		<form method="post">
+			所在位置：<input type="text" name="location" value="" readonly="readonly" size="30" />
+			<br>
+			測得速度：<input type="text" name="speed" value="" readonly="readonly" size="10" /> kbps
+			<br>
+			<br>
+			請問你用什麼方式上網？<br>
+			<input type="submit" name="provider_tech" value="中華電信 3G" />
+			<input type="submit" name="provider_tech" value="台灣大哥大 3G" />
+			<input type="submit" name="provider_tech" value="遠傳電信 3G" />
+			<br>
+		</form>
+		<font size="-1">※ 所有測速結果回報皆為匿名</font>
+	</div>
+  	<div id="require_gps" class="msg">
+  	請開啟 GPS 定位！
+  	</div>
+  	<br>
+  	<font size="-1"><a href="http://jacksctsai.blogspot.com/">jack's blog</a> | Follow <a href="https://twitter.com/#!/jacksctsai">@jacksctsai</a> | <a href="http://www.plurk.com/jacksctsai">傑克噗浪</a></font>
+
+	<script>
+	var time1;  
+	var bytesLoaded = 499717;  
+	function test() 
+	{
+		$(":submit").attr("disabled", true);
+		var d = new Date;
+		time1 = d.getTime();
+	 
+		$.get(
+			'payload/speedtestpayload.html',
+			function(obj) 
+			{
+				var d = new Date;
+				var time = Math.round((d.getTime()-time1)/10)/100;
+				var connSpeed = Math.round(bytesLoaded/time/1000);
+
+				$("input[name='speed']").val(connSpeed);
+				$(":submit").attr("disabled", false);
+			}
+		);
+	}    
+	</script>
+  
+	<script>
+	function locationGot(position) {
+		$("#require_gps").hide();
+		//alert('latitude:'+position.coords.latitude+', longitude' + position.coords.longitude);
+		$("input[name='location']").val(position.coords.latitude+', ' + position.coords.longitude);
+		$("#reportPanel").fadeIn();
+		test();
+	}
+	$(".msg").hide();
+    if (navigator.geolocation) {
+		$("#require_gps").fadeIn();
+		navigator.geolocation.getCurrentPosition(locationGot);
+	}
+	else {
+	}
+	</script>
+	
+</body>
+</html>

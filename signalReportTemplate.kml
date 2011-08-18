@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+    <Document>
+        <name>Taiwan 3G Network Signal</name>
+        <description>Network Signal</description>
+        <Style id="Excellent">
+            <IconStyle>
+                <Icon>
+                    <href>http://maps.google.com/mapfiles/kml/paddle/grn-stars_maps.png</href>
+                </Icon>
+            </IconStyle>
+        </Style>
+        <Style id="Good">
+            <IconStyle>
+                <Icon>
+                    <href>http://maps.google.com/mapfiles/kml/paddle/grn-blank_maps.png</href>
+                </Icon>
+            </IconStyle>
+        </Style>
+        <Style id="Poor">
+            <IconStyle>
+                <Icon>
+                    <href>http://maps.google.com/mapfiles/kml/paddle/ylw-blank_maps.png</href>
+                </Icon>
+            </IconStyle>
+        </Style>
+        <Style id="Bad">
+            <IconStyle>
+                <Icon>
+                    <href>http://maps.google.com/mapfiles/kml/paddle/red-blank_maps.png</href>
+                </Icon>
+            </IconStyle>
+        </Style>
+        {% for signal in signals %}
+        <Placemark>
+            <name>測速 {{ signal.speed }} kbps</name>
+            <description>{{ signal.provider }} {{ signal.tech }} {{ signal.date }}</description>
+            <styleUrl>{% if signal.Excellent %}#Excellent{% endif %}{% if signal.Good %}#Good{% endif %}{% if signal.Poor %}#Poor{% endif %}{% if signal.Bad %}#Bad{% endif %}</styleUrl>
+            <Point>
+                <extrude>1</extrude>
+                <altitudeMode>relativeToGround</altitudeMode>
+                <coordinates>{{ signal.location.lon }},{{ signal.location.lat }}</coordinates>
+            </Point>
+        </Placemark>
+        {% endfor %}
+    </Document>
+</kml>

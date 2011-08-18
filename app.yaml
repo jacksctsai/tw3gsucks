@@ -1,0 +1,21 @@
+application: tw3gsucks
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /css
+  static_dir: css
+
+- url: /payload
+  static_dir: payload
+  
+- url: /signalReport.kml
+  script: signalReportKMLGen.py
+
+- url: /favicon.ico
+  static_files: static/images/favicon.ico
+  upload: static/images/favicon.ico
+
+- url: /.*
+  script: reportsignal.py
