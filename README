@@ -2,3 +2,5 @@
 Motivated by the slow 3g network access here in Taiwan, tw3gsucks is a webapp project that provide 3g telecommunication network speed testing service featuring map representation to the public.
 
 The goal of tw3gsucks project is to encourage a better wireless network access, as it is part of the very basic infrastructure to clouds.
+
+tw3gsucks is now hosted on Google Application Engine at http://tw3gsucks.appspot.com
