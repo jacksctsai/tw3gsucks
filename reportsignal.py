@@ -40,7 +40,7 @@ class MainPage(webapp.RequestHandler):
 		signalReport.ip = self.request.remote_addr
 	
 		signalReport.put()
-		self.redirect('/reportSaved?location='+self.request.get('location'))
+		self.redirect('/reportSaved?location='+self.request.get('location')+'&speed='+self.request.get('speed'))
 
 class ShowMapPage(webapp.RequestHandler):
     def get(self):
@@ -57,7 +57,8 @@ class ReportSaved(webapp.RequestHandler):
     def get(self):
 
         path = os.path.join(os.path.dirname(__file__), 'reportSaved.html')
-        self.response.out.write(template.render(path, {'location': self.request.get('location')}))
+    	templateValues = {'location': self.request.get('location'), 'speed': self.request.get('speed'), 'speedInMB': int(self.request.get('speed'))/1024};
+        self.response.out.write(template.render(path, templateValues))
 
 application = webapp.WSGIApplication([
   ('/', MainPage),

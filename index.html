@@ -7,7 +7,6 @@
 		<meta http-equiv="Cache-Control" content="no-cache"> 
 		<meta http-equiv="Expires" content="0"> 
 		<script type="text/javascript">
-		
 		  var _gaq = _gaq || [];
 		  _gaq.push(['_setAccount', 'UA-25199920-1']);
 		  _gaq.push(['_trackPageview']);
@@ -27,10 +26,12 @@
   	</div>
   	<div id="reportPanel" class="msg">
 		<form method="post">
+		  	<div id="testResult" class="result">
 			所在位置：<input type="text" name="location" value="" readonly="readonly" size="30" />
 			<br>
 			測得速度：<input type="text" name="speed" value="" readonly="readonly" size="10" /> kbps
 			<br>
+			</div>
 			<br>
 			請問你用什麼方式上網？<br>
 			<input type="submit" name="provider_tech" value="中華電信 3G" />
@@ -38,12 +39,17 @@
 			<input type="submit" name="provider_tech" value="遠傳電信 3G" />
 			<br>
 		</form>
-		<font size="-1">※ 所有測速結果回報皆為匿名</font>
+		<div id="require_gps" class="msg">
+		請開啟 GPS 定位！
+		</div>
+		<br>
 	</div>
-  	<div id="require_gps" class="msg">
-  	請開啟 GPS 定位！
-  	</div>
   	<br>
+	<br>
+	<br>
+	<font size="-1">※ 所有測速結果回報皆為匿名</font>
+	<br>
+	<br>
   	<font size="-1"><a href="http://jacksctsai.blogspot.com/">jack's blog</a> | Follow <a href="https://twitter.com/#!/jacksctsai">@jacksctsai</a> | <a href="http://www.plurk.com/jacksctsai">傑克噗浪</a></font>
 
 	<script>
@@ -79,6 +85,7 @@
 		test();
 	}
 	$(".msg").hide();
+	$(".result").hide();
     if (navigator.geolocation) {
 		$("#require_gps").fadeIn();
 		navigator.geolocation.getCurrentPosition(locationGot);
