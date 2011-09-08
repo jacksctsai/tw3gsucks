@@ -12,6 +12,9 @@ handlers:
   
 - url: /signalReport.kml
   script: signalReportKMLGen.py
+  
+- url: /showMap
+  script: signalReportGen.py
 
 - url: /favicon.ico
   static_files: static/images/favicon.ico

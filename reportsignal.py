@@ -62,7 +62,8 @@ class ReportSaved(webapp.RequestHandler):
 
 application = webapp.WSGIApplication([
   ('/', MainPage),
-  ('/showMap', ShowMapPage),
+# /showMap handler moved to signalReportGen.py
+#  ('/showMap', ShowMapPage),
   ('/reportSaved', ReportSaved)
 ], debug=True)
 
