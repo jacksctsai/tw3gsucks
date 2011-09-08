@@ -1,0 +1,77 @@
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+<script type="text/javascript">
+  function initialize() {
+	var myLatlng = new google.maps.LatLng(24.774922,121.044976);
+	//var myLatlng = new google.maps.LatLng(24.804695,120.988891);
+	//var myLatlng = new google.maps.LatLng({{ location }});
+	
+	var myOptions = {
+	  zoom: 15,
+	  center: myLatlng,
+	  mapTypeId: google.maps.MapTypeId.ROADMAP
+	}
+	
+	var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	
+	var contentString;
+	var infowindow;
+	var marker;
+	var ExcellentImage = "http://maps.google.com/mapfiles/kml/paddle/grn-stars_maps.png";
+	var GoodImage = "http://maps.google.com/mapfiles/kml/paddle/grn-blank_maps.png";
+	var PoorImage = "http://maps.google.com/mapfiles/kml/paddle/ylw-blank_maps.png";
+	var BadImage = "http://maps.google.com/mapfiles/kml/paddle/red-blank_maps.png";
+	
+    {% for signal in signals %}
+    
+	var myLatlng{{ signal.key.id }} = new google.maps.LatLng({{ signal.location.lat }}, {{ signal.location.lon }});
+    
+	var contentString{{ signal.key.id }} = '<div id="content">'+
+		'<div id="landMarkNotice">'+
+		'<img src='+{% if signal.Excellent %}ExcellentImage{% endif %}{% if signal.Good %}GoodImage{% endif %}{% if signal.Poor %}PoorImage{% endif %}{% if signal.Bad %}BadImage{% endif %}+' />'+
+		'實測每秒 {{ signal.speed }} KB ({{ signal.provider }} {{ signal.tech }})'+
+		'</div>'+
+		'<p> {{ signal.dateStr }}</p>'+
+		'<p><font size="-1">經緯度：{{ signal.location.lon }},{{ signal.location.lat }}</font></p>'+
+		'</div>';
+	
+	var infowindow{{ signal.key.id }} = new google.maps.InfoWindow({
+		content: contentString{{ signal.key.id }}
+	});
+	
+	var marker{{ signal.key.id }} = new google.maps.Marker({
+		position: myLatlng{{ signal.key.id }},
+		map: map,
+		icon: {% if signal.Excellent %}ExcellentImage{% endif %}{% if signal.Good %}GoodImage{% endif %}{% if signal.Poor %}PoorImage{% endif %}{% if signal.Bad %}BadImage{% endif %},
+		title: "測速 {{ signal.speed }} kbps"
+	});
+	
+	google.maps.event.addListener(marker{{ signal.key.id }}, 'click', function() {
+	  infowindow{{ signal.key.id }}.open(map,marker{{ signal.key.id }});
+	});
+    {% endfor %}
+
+  }
+
+</script>
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-25199920-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</head>
+<body onload="initialize()">
+  <div id="map_canvas" style="width:100%; height:100%"></div>
+	
+</body>
+</html>
