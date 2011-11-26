@@ -3,10 +3,16 @@
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript">
+  function createEnclosur(map, marker, infowindow) {
+    return function() {
+	  infowindow.open(map,marker);
+	};
+  }
+  
   function initialize() {
-	//var myLatlng = new google.maps.LatLng(24.774922,121.044976);
+	var myLatlng = new google.maps.LatLng(24.774922,121.044976);
 	//var myLatlng = new google.maps.LatLng(24.804695,120.988891);
-	var myLatlng = new google.maps.LatLng({{ location }});
+	//var myLatlng = new google.maps.LatLng({{ location }});
 	
 	var myOptions = {
 	  zoom: 15,
@@ -26,9 +32,9 @@
 	
     {% for signal in signals %}
     
-	var myLatlng{{ signal.key.id }} = new google.maps.LatLng({{ signal.location.lat }}, {{ signal.location.lon }});
+	var myLatlng = new google.maps.LatLng({{ signal.location.lat }}, {{ signal.location.lon }});
     
-	var contentString{{ signal.key.id }} = '<div id="content">'+
+	var contentString = '<div id="content">'+
 		'<div id="landMarkNotice">'+
 		'<img src='+{% if signal.Excellent %}ExcellentImage{% endif %}{% if signal.Good %}GoodImage{% endif %}{% if signal.Poor %}PoorImage{% endif %}{% if signal.Bad %}BadImage{% endif %}+' />'+
 		'實測每秒 {{ signal.speed }} KB ({{ signal.provider }} {{ signal.tech }})'+
@@ -37,20 +43,18 @@
 		'<p><font size="-1">經緯度：{{ signal.location.lon }},{{ signal.location.lat }}</font></p>'+
 		'</div>';
 	
-	var infowindow{{ signal.key.id }} = new google.maps.InfoWindow({
-		content: contentString{{ signal.key.id }}
+	var infowindow = new google.maps.InfoWindow({
+		content: contentString
 	});
 	
-	var marker{{ signal.key.id }} = new google.maps.Marker({
-		position: myLatlng{{ signal.key.id }},
+	var marker = new google.maps.Marker({
+		position: myLatlng,
 		map: map,
 		icon: {% if signal.Excellent %}ExcellentImage{% endif %}{% if signal.Good %}GoodImage{% endif %}{% if signal.Poor %}PoorImage{% endif %}{% if signal.Bad %}BadImage{% endif %},
 		title: "測速 {{ signal.speed }} kbps"
 	});
 	
-	google.maps.event.addListener(marker{{ signal.key.id }}, 'click', function() {
-	  infowindow{{ signal.key.id }}.open(map,marker{{ signal.key.id }});
-	});
+	google.maps.event.addListener(marker, 'click', createEnclosur(map,marker, infowindow));
     {% endfor %}
 
   }

@@ -39,7 +39,7 @@ class ShowMap2Page(webapp.RequestHandler):
         else:
           template_values['location'] = self.request.get('location')
 
-        path = os.path.join(os.path.dirname(__file__), 'showMap2.html')
+        path = os.path.join(os.path.dirname(__file__), 'showMapTest.html')
         self.response.out.write(template.render(path, template_values))
 
 application = webapp.WSGIApplication([
